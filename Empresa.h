@@ -11,6 +11,7 @@
 #include "taxi.h"
 #include "cliente.h"
 #include <queue>
+#include "cstdlib"
 
 class Empresa {
 public:
@@ -23,9 +24,16 @@ public:
     void agregar_a_cola(Taxi taxi);
     bool asignar_taxi(Cliente cliente);
     void solicitar_taxi();
+    void finalizar_viaje(double costo);
+    void cancelar_viaje();
     void reingresar_a_cola();
     void mostrar_taxis_disponibles();
     void mostrar_taxis_en_ruta();
+    void limparPantalla();
+    void pausa();
+    void mostrar_menu_cliente();
+    void mostrar_menu_principal();
+    void mostrar_menus();
     static std::queue<Taxi> taxis_en_espera;
     static std::queue<Taxi> cola_ruta_;
 
