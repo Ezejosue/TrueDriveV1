@@ -16,6 +16,7 @@
 class Empresa {
 public:
     Empresa();
+    void cargar_datos();
     void agregar_taxi();
     bool validar_taxi(Taxi& nuevo_taxi);
     bool validar_conductor(Conductor& nuevo_conductor);

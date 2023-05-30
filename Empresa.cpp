@@ -9,12 +9,46 @@
 #include "taxi.h"
 #include <queue>
 #include "cstdlib"
+#include <fstream>
+#include <sstream>
 
 
 Empresa::Empresa() {}
 
 std::queue<Taxi> Empresa::taxis_en_espera;
 std::queue<Taxi> Empresa::cola_ruta_;
+
+void Empresa::cargar_datos() {
+    // Cargar los datos de los taxis desde el archivo
+    std::ifstream archivo_taxis("taxis.txt");
+    if (archivo_taxis.is_open()) {
+        std::string linea;
+        while (std::getline(archivo_taxis, linea)) {
+            std::stringstream ss(linea);
+            std::string dato;
+            std::vector<std::string> datos_taxi;
+            while (std::getline(ss, dato, ',')) {
+                datos_taxi.push_back(dato);
+            }
+
+            // Crear un objeto Taxi y agregarlo a la cola de espera
+            Taxi taxi;
+            taxi.placa = datos_taxi[0];
+            taxi.categoria = datos_taxi[1];
+            taxi.year = std::stoi(datos_taxi[2]);
+            taxi.modelo = datos_taxi[3];
+            taxi.numero_motor = datos_taxi[4];
+            taxi.conductor.nombre = datos_taxi[5];
+            taxi.conductor.apellido = datos_taxi[6];
+            taxi.conductor.numero_documento_identidad= datos_taxi[7];
+            taxi.conductor.numero_seguro_social = datos_taxi[8];
+            taxi.conductor.numero_telefono = datos_taxi[9];
+            taxis_en_espera.push(taxi);
+        }
+        archivo_taxis.close();
+    }
+
+}
 
 
 void Empresa::limparPantalla() {
@@ -111,8 +145,15 @@ void Empresa::agregar_taxi() {
     std::cout << "Año: " << nuevo_taxi.year << std::endl;
     std::cout << "Categoría: " << nuevo_taxi.categoria << std::endl;
     std::cout << "Conductor: " << nuevo_taxi.conductor.nombre << " " << nuevo_taxi.conductor.apellido << std::endl;
-    std::cout << "Número de documento de identidad: " << nuevo_taxi.conductor.numero_documento_identidad << std::endl
-              << std::endl;
+    std::cout << "Número de documento de identidad: " << nuevo_taxi.conductor.numero_documento_identidad << std::endl;
+
+    // Guardar los datos en un archivo de texto
+    std::ofstream archivo("taxis.txt", std::ios::app);
+    archivo << nuevo_taxi.placa << "," << nuevo_taxi.categoria << "," << nuevo_taxi.year << "," << nuevo_taxi.modelo << "," << nuevo_taxi.numero_motor << ","
+            << nuevo_taxi.conductor.nombre << "," << nuevo_taxi.conductor.apellido << "," << nuevo_taxi.conductor.numero_documento_identidad << ","
+            << nuevo_taxi.conductor.numero_seguro_social << "," << nuevo_taxi.conductor.numero_telefono << std::endl;
+    archivo.close();
+
     pausa();
     limparPantalla();
 
@@ -494,7 +535,7 @@ void Empresa::mostrar_menu_principal() {
 
 void Empresa::mostrar_menus() {
     int opcion = 0;
-    while (opcion != 3) {
+    while (opcion != 2) {
         limparPantalla();
         std::cout << "------ MENU ------" << std::endl;
         std::cout << "1. Menú cliente" << std::endl;
@@ -520,6 +561,5 @@ void Empresa::mostrar_menus() {
                 break;
         }
 
-        pausa();
     }
 }

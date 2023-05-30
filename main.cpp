@@ -5,6 +5,7 @@
 
 int main() {
     Empresa empresa;
+    empresa.cargar_datos();
     empresa.mostrar_menus();
     return 0;
 }
