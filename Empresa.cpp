@@ -12,6 +12,15 @@
 #include <sstream>
 
 
+// Colores ANSI
+#define ANSI_RESET "\033[0m"
+#define ANSI_BOLD "\033[1m"
+#define ANSI_GREEN "\033[32m"
+#define ANSI_CYAN "\033[36m"
+#define ANSI_RESET "\033[0m"
+#define ANSI_YELLOW "\033[33m"
+#define ANSI_RED "\033[31m"
+
 Empresa::Empresa() {}
 
 std::queue<Taxi> Empresa::taxis_en_espera;
@@ -435,12 +444,15 @@ void Empresa::mostrar_menu_cliente() {
     int opcion = 0;
     while (opcion != 4) {
         limparPantalla();
-        std::cout << "------ MENU CLIENTE ------" << std::endl;
-        std::cout << "1. Ver taxis disponibles" << std::endl;
-        std::cout << "2. Ver taxis en ruta" << std::endl;
-        std::cout << "3. Solicitar taxi" << std::endl;
-        std::cout << "4. Volver al menú principal" << std::endl;
-        std::cout << "Ingrese la opcion deseada: ";
+        std::cout << "**************************************************************" << std::endl;
+        std::cout << ANSI_BOLD << ANSI_CYAN << "*************         MENU CLIENTE         *******************" << ANSI_RESET << std::endl;
+        std::cout << "**************************************************************" << std::endl;
+        std::cout << ANSI_BOLD << ANSI_YELLOW << "*********    1. Ver taxis disponibles               ***********" << ANSI_RESET << std::endl;
+        std::cout << ANSI_BOLD << ANSI_YELLOW << "*********    2. Ver taxis en ruta                   ***********" << ANSI_RESET << std::endl;
+        std::cout << ANSI_BOLD << ANSI_YELLOW << "*********    3. Solicitar taxi                      ***********" << ANSI_RESET << std::endl;
+        std::cout << ANSI_BOLD << ANSI_YELLOW << "*********    4. Volver al menú principal            ***********" << ANSI_RESET << std::endl;
+        std::cout << "**************************************************************" << std::endl;
+        std::cout << "Ingrese la opción deseada: ";
         std::cin >> opcion;
 
         switch (opcion) {
@@ -477,15 +489,16 @@ void Empresa::mostrar_menu_principal() {
         limparPantalla();
 
         std::cout << "**************************************************************" << std::endl;
-        std::cout << "*********                TrueDrive                           *" << std::endl;
+        std::cout << ANSI_BOLD << ANSI_CYAN << "**********************   TrueDrive   *************************" << ANSI_RESET << std::endl;
         std::cout << "**************************************************************" << std::endl;
-        std::cout << "*********   1. Agregar taxi                                  *" << std::endl;
-        std::cout << "*********   2. Solicitar taxi                                *" << std::endl;
-        std::cout << "*********   3. Mostrar taxis disponibles                     *" << std::endl;
-        std::cout << "*********   4. Mostrar taxis en ruta                         *" << std::endl;
-        std::cout << "*********   5. Mostrar taxis                                 *" << std::endl;
-        std::cout << "*********   6. Salir                                         *" << std::endl;
+        std::cout << ANSI_BOLD << "**********    1. Agregar taxi                                *" << ANSI_RESET << std::endl;
+        std::cout << ANSI_BOLD << "**********    2. Solicitar taxi                              *" << ANSI_RESET << std::endl;
+        std::cout << ANSI_BOLD << "**********    3. Mostrar taxis disponibles                   *" << ANSI_RESET << std::endl;
+        std::cout << ANSI_BOLD << "**********    4. Mostrar taxis en ruta                       *" << ANSI_RESET << std::endl;
+        std::cout << ANSI_BOLD << "**********    5. Mostrar todos los taxis                     *" << ANSI_RESET << std::endl;
+        std::cout << ANSI_BOLD << "**********    6. Salir                                       *" << ANSI_RESET << std::endl;
         std::cout << "**************************************************************" << std::endl;
+
 
         std::cout << "Ingrese una opcion: ";
         std::cin >> opcion;
@@ -526,11 +539,13 @@ void Empresa::mostrar_menus() {
     int opcion = 0;
     while (opcion != 3) {
         limparPantalla();
-        std::cout << "------ MENU ------" << std::endl;
-        std::cout << "1. Menú cliente" << std::endl;
-        std::cout << "2. Menú principal" << std::endl;
-        std::cout << "3. Salir" << std::endl;
-        std::cout << "Ingrese la opcion deseada: ";
+        std::cout << ANSI_CYAN << "**************************************************************" << ANSI_RESET << std::endl;
+        std::cout << ANSI_BOLD << "------ " << ANSI_CYAN << "TRUEDRIVE" << ANSI_RESET << ANSI_BOLD << " ------" << std::endl;
+        std::cout << ANSI_BOLD << ANSI_GREEN << "1. Menú cliente" << ANSI_RESET << std::endl;
+        std::cout << ANSI_BOLD << ANSI_GREEN << "2. Menú principal" << ANSI_RESET << std::endl;
+        std::cout << ANSI_BOLD << ANSI_GREEN << "3. Salir" << ANSI_RESET << std::endl;
+        std::cout << ANSI_CYAN << "**************************************************************" << ANSI_RESET << std::endl;
+        std::cout << "Ingrese la opción deseada: ";
         std::cin >> opcion;
 
         switch (opcion) {
