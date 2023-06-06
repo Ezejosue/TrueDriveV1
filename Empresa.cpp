@@ -8,7 +8,6 @@
 #include "conductor.h"
 #include "taxi.h"
 #include <queue>
-#include "cstdlib"
 #include <fstream>
 #include <sstream>
 
@@ -44,6 +43,8 @@ void Empresa::cargar_datos() {
             taxi.conductor.numero_seguro_social = datos_taxi[8];
             taxi.conductor.numero_telefono = datos_taxi[9];
             taxis_en_espera.push(taxi);
+            taxis_.push_back(taxi);
+
         }
         archivo_taxis.close();
     }
@@ -194,12 +195,12 @@ void Empresa::agregar_a_cola(Taxi taxi) {
 }
 
 void Empresa::mostrar_taxis() {
-    limparPantalla();
     if (taxis_.empty()) {
         std::cout << "No hay taxis registrados en la empresa." << std::endl;
         pausa();
         limparPantalla();
     } else {
+        limparPantalla();
         std::cout << "Taxis registrados en la empresa:" << std::endl;
         for (const auto &taxi: taxis_) {
             std::cout << "Placa: " << taxi.placa << std::endl;
@@ -217,42 +218,34 @@ void Empresa::mostrar_taxis() {
 }
 
 void Empresa::finalizar_viaje(double costo) {
+
+
     // Obtener el taxi en ruta
-    Taxi taxi = cola_ruta_.front();
-    cola_ruta_.pop();
+    Taxi taxi;
+
+    // Agregar el taxi nuevamente a la cola de espera
+    reingresar_a_cola();
     Cliente cliente;
     // Mostrar datos relevantes del viaje
     std::cout << "------ VIAJE FINALIZADO ------" << std::endl;
-    std::cout << "Taxi: " << taxi.placa << std::endl;
-    std::cout << "Conductor: " << taxi.conductor.nombre << " " << taxi.conductor.apellido << std::endl;
-    std::cout << "Punto de salida: " << cliente.punto_salida << std::endl;
-    std::cout << "Destino: " << cliente.destino << std::endl;
     std::cout << "Costo del viaje: $" << costo << std::endl;
 
     // Simulación de cobro
     std::cout << "Cobro realizado exitosamente." << std::endl;
 
-    // Agregar el taxi nuevamente a la cola de espera
-    reingresar_a_cola();
-
-    std::cout << "El taxi ha sido reingresado a la cola de espera." << std::endl;
     pausa();
     limparPantalla();
     mostrar_menu_cliente();
 }
 
 void Empresa::cancelar_viaje() {
-    // Obtener el taxi en ruta
-    Taxi taxi = cola_ruta_.front();
-    cola_ruta_.pop();
 
-    std::cout << "Viaje cancelado." << std::endl;
+
 
     // Agregar el taxi nuevamente a la cola de espera
     reingresar_a_cola();
-
-    std::cout << "El taxi ha sido reingresado a la cola de espera." << std::endl;
-
+    Cliente cliente;
+    std::cout << "Viaje cancelado." << std::endl;
     pausa();
     limparPantalla();
     mostrar_menu_cliente();
@@ -279,6 +272,7 @@ void Empresa::solicitar_taxi() {
         costo = 25; // Costo base de la categoría tradicional
     }
 
+    limparPantalla();
     // Buscamos el primer taxi disponible en la cola de espera de la categoría solicitada
     bool taxi_asignado = asignar_taxi(cliente);
     if (taxi_asignado) {
@@ -286,7 +280,7 @@ void Empresa::solicitar_taxi() {
         std::cout << "Costo del viaje: $" << costo << std::endl;
 
         int opcion = 0;
-        while (opcion != 4) {
+        while (opcion != 5) {
             std::cout << "------ VIAJE EN CURSO ------" << std::endl;
             std::cout << "1. Finalizar viaje" << std::endl;
             std::cout << "2. Cancelar viaje" << std::endl;
@@ -309,8 +303,8 @@ void Empresa::solicitar_taxi() {
                     mostrar_taxis_en_ruta();
                     break;
                 case 4:
-                    limparPantalla();
                     mostrar_taxis_disponibles();
+                    limparPantalla();
                     break;
                 default:
                     std::cout << "Opcion no valida. Por favor, intente de nuevo." << std::endl;
@@ -378,14 +372,11 @@ void Empresa::mostrar_taxis_disponibles() {
 
     std::cout << "Taxis disponibles en cola de espera:" << std::endl;
 
-    std::cout << std::endl;
-
     if (taxis_en_espera.empty()) {
         std::cout << std::endl;
 
         std::cout << "No hay taxis en cola de espera." << std::endl;
         std::cout << std::endl;
-        pausa();
         limparPantalla();
 
     } else {
@@ -402,17 +393,16 @@ void Empresa::mostrar_taxis_disponibles() {
             std::cout << "Conductor: " << taxi.conductor.nombre << " " << taxi.conductor.apellido << std::endl;
             std::cout << std::endl;
         }
-        pausa();
-        limparPantalla();
     }
+
+    pausa();
+
 }
 
 void Empresa::mostrar_taxis_en_ruta() {
     limparPantalla();
 
     std::cout << "Taxis en ruta:" << std::endl;
-    std::cout << std::endl;
-
     if (cola_ruta_.empty()) {
         std::cout << std::endl;
 
@@ -437,8 +427,6 @@ void Empresa::mostrar_taxis_en_ruta() {
             std::cout << "Conductor: " << taxi.conductor.nombre << " " << taxi.conductor.apellido << std::endl;
             std::cout << std::endl;
         }
-        pausa();
-        limparPantalla();
     }
 }
 
@@ -486,6 +474,7 @@ void Empresa::mostrar_menu_cliente() {
 void Empresa::mostrar_menu_principal() {
     int opcion = 0;
     while (opcion != 6) {
+        limparPantalla();
 
         std::cout << "**************************************************************" << std::endl;
         std::cout << "*********                TrueDrive                           *" << std::endl;
@@ -535,7 +524,7 @@ void Empresa::mostrar_menu_principal() {
 
 void Empresa::mostrar_menus() {
     int opcion = 0;
-    while (opcion != 2) {
+    while (opcion != 3) {
         limparPantalla();
         std::cout << "------ MENU ------" << std::endl;
         std::cout << "1. Menú cliente" << std::endl;
